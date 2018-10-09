@@ -1,2 +1,2 @@
-1) nmp install
+1) npm install
 2) gulp
