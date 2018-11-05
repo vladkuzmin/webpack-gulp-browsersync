@@ -17,10 +17,12 @@ const rename = require('gulp-rename');
 const runSequence = require('run-sequence');
 const sass = require("gulp-sass");
 const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify-es').default;
 
 // Webpack config file
 //------------------------
-const webpackConfig = require('./webpack.config.js');
+let webpackConfig = require('./webpack.config.js');
+let webpackConfigProd = require('./webpack.config.prod.js');
 //-------------------------
 const isProd = !!argv.production;
 const isDev = !isProd;
@@ -48,7 +50,9 @@ let scriptFiles = [
 
 gulp.task('js', () => {
   gulp.src(scriptFiles)
-    .pipe(webpackStream(webpackConfig), webpack)
+    .pipe(gulpif(isDev, webpackStream((webpackConfig), webpack)))
+    .pipe(gulpif(isProd, webpackStream((webpackConfigProd), webpack)))
+    .pipe(uglify())
     .pipe(gulp.dest('./build/js'));
 });
 //--------------------------
@@ -84,7 +88,6 @@ gulp.task('images', () =>
 );
 //-------------------------
 
-
 // Watch
 //--------------------------
 gulp.task('watch', () => {
@@ -101,7 +104,7 @@ gulp.task('server', () => {
         server: {
             baseDir: "build"
         },
-        files: ["./build/css/*","./build/*.html"] 
+        files: ["./build/css/*", "./build/js/*.js", "./build/*.html"] 
     });
 });
 //--------------------------

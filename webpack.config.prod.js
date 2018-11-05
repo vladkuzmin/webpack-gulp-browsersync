@@ -1,7 +1,5 @@
 module.exports = {
     mode: 'none',
-    watch: true,
-    devtool: 'eval-source-map',
     output: {
         filename: 'app.js',
     },
@@ -16,5 +14,5 @@ module.exports = {
                 }
             }
         }, ],
-    }
+    },
 };
